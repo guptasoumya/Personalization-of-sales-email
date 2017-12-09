@@ -14,26 +14,20 @@ Summary of the journey
 
 We explored multiple approaches and datasets, in order to meet the requirements of the project - 
 
-Chatterbot: It is a python inbuilt-library that allows creating chatbot on data, once cleaned. IT provided flexibility like padding, vectorization of data and linking with different email APIs like gmail, yahoo etc. In addition, it links with sendgrid, mailgrid to provide data like when the email was opened, email link clicked, how long did the user spent on the email etc. 
-Seq2seq: This approach provides us more flexibility, because unlike chatterbot, it is written from scratch. We decided to go ahead with this approach. At beginning, the model was trained without pre-trained word embeddings, after 100 epochs of training, the loss stays over 1.5, and the answer for many questions stay the same (using the most frequent answers in the training data set). With the pretrained global word vectors, the loss jumps below 
-Template based approach : Detailed below. This approach was suggested by Prof Ikhlaq Sidhu as a preferred approach to the problem statement. We decided to try this as well, along with chatbot for a more reliable email response. 
+1. Define the value of sender and his/her email (detailed below)
 
-Dataset: 
-Enron dataset - This dataset was initially suggested by the Maverick team. It is a data on emails and their responses for around 55000 interactions. However, cleaning this data posed a challenge. We used this data by manually cleaning it for Template based approach.
-Twitter dataset - This is a widely accepted database for chatbot development. It is openly available on the internet and contains around 20,000 interactions. We decided to go ahead with the for the chatbot, due to lack of email dataset that could feed the chatbot. 
+2. For low value emails, we choose using Seq2seq algorithm and build automatic email generation system(detailed below). After enormous training, emails will be replied flexibly and automatically with the pretrained seq2seq model.
+
+3. For high value emails, we decide using Template based approach(detailed below), which was suggested by Prof Ikhlaq Sidhu as a preferred approach to the problem statement. We found Chatterbot, a python library, with simple NLP training it can help select the right template based on keywords and sentiment analysis of emails received.
  
-
-
-
-
 
 Work Done
 
-3.1)	How to define the value of sender and his/her email
+1. How to define the value of sender and his/her email
 We define the professional, personal and company persona in order to understand the value of the client. We started with LinkedIn scraping using Selenium Webdriver. We successfully scraped 1000+ profiles.We used this data to score client into ‘high/medium/low’ value clients based on different weightage given to characteristics like title held in the company, level of education, years of experience and experience relevance. This enable us to determine if our code will directly respond to an incoming email or ask the user for manual intervention, when a high-value client is identified. 
 	
 
-3.2)	Chatbot Based Approach
+2. Chatbot Based Approach
 Dataset selection:
 Initially, we tried to use Enron email dataset to train a seq2seq model, but found matching reply email to the original email is challenging. Also considering the various length of emails, there won’t be enough samples in each bucket of length. Thus, we turned to using another popular dataset --Movie Dialogue Corpus, provided by Cornell University.
 
@@ -50,7 +44,7 @@ By using impalib and email libraries in python, we can get the sender’s email 
 
 We have created a test account: chatbot2017fall@gmail.com. If executing the code(fetch_email.py), it will start scratching the inbox for unread emails every 5 seconds, which can be adjusted by time.sleep(). And by testing, we find the reply can be generated and sent in several seconds automatically.
 
-3.3)	Template based approach with sentiment analysis:
+3. Template based approach with sentiment analysis:
 
 The Dataset:
 We used the Enron email dataset for the purposes of sentiment analysis. The dataset was obtained from Kaggle. The dataset has 517401 rows consisting of the file name and the email message as two columns. A sample of the email message file is given below:
@@ -70,16 +64,18 @@ Sentiment analysis and reply:
 The manually labelled dataset was used for training the random forest classifier model using 50 estimators. Based on the trained model, when there is an incoming mail, it can be fed into the model to predict the sentiment. Based on the predicted sentiment, conditional statements are used to select a pre-drafted reply.
 
 
-Future Steps and Collaboration
+Future Steps 
+
+1. Reinforcement Learning:
+The seq2seq model for replying emails precisely is challenging inherently. We can look for reinforcement learning algorithm to improve this. Whenever there is human intervention or editing of the outgoing emails, both the incoming email and outgoing email (or sentiment of incoming email) can be fed back to the training dataset. This will cause the model to get more accurate and agile over time specifically suited to the user.
+
+2. Template-based replying:
+Once we have email dataset from one specific company or industry, we can use our mastered NLP skills to train with chatterbot in Python, which can analyze emails and select the pre-written template.
 
 
-Feedback mechanism:
-A feedback mechanism could be introduced to make sure that the model gets better over time. Whenever there is human intervention or editing of the outgoing emails, both the incoming email and outgoing email (or sentiment of incoming email) can be fed back to the training dataset. This will cause the model to get more accurate and agile over time specifically suited to the user.
+Collaboration
 
-
-
-
-Collaboration: The project was done under the guidance of Maverick.ai CEO and CTO, Yaron Oren and Kevin Wu, respectively. The mentors were extremely helpful in providing relevant reading resources and brought us up to the speed. Within team we employed a democratic model of decision making with each member’s input taken into account for the direction of the project.
+The project was done under the guidance of Maverick.ai CEO and CTO, Yaron Oren and Kevin Wu, respectively. The mentors were extremely helpful in providing relevant reading resources and brought us up to the speed. Within team we employed a democratic model of decision making with each member’s input taken into account for the direction of the project.
 
 
 
