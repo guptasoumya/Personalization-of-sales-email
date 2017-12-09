@@ -49,59 +49,18 @@ for i in range(limit+1000, limit+1005):
 print(len(questions))
 print(len(answers))
 
-
-def clean_text(text):
-    '''Clean text by removing unnecessary characters and altering the format of words.'''
-
-    text = text.lower()
-
-    text = re.sub(r"i'm", "i am", text)
-    text = re.sub(r"he's", "he is", text)
-    text = re.sub(r"she's", "she is", text)
-    text = re.sub(r"it's", "it is", text)
-    text = re.sub(r"that's", "that is", text)
-    text = re.sub(r"what's", "that is", text)
-    text = re.sub(r"where's", "where is", text)
-    text = re.sub(r"how's", "how is", text)
-    text = re.sub(r"\'ll", " will", text)
-    text = re.sub(r"\'ve", " have", text)
-    text = re.sub(r"\'re", " are", text)
-    text = re.sub(r"\'d", " would", text)
-    text = re.sub(r"\'re", " are", text)
-    text = re.sub(r"won't", "will not", text)
-    text = re.sub(r"can't", "cannot", text)
-    text = re.sub(r"n't", " not", text)
-    text = re.sub(r"n'", "ng", text)
-    text = re.sub(r"'bout", "about", text)
-    text = re.sub(r"'til", "until", text)
-    text = re.sub(r"[-()\"#/@:<>{}`+=~|]", "", text)
-
-    return text
-
-
-# Clean the data
-clean_questions = []
-for question in questions:
-    clean_questions.append(clean_text(question))
-
-clean_answers = []
-for answer in answers:
-    clean_answers.append(clean_text(answer))
-
-
-
 # Take a look at some of the data to ensure that it has been cleaned well.
 limit = 0
 for i in range(limit+1000, limit+1005):
-    print(clean_questions[i])
-    print(clean_answers[i])
+    print(questions[i])
+    print(answers[i])
     print()
 
 # Find the length of sentences
 lengths = []
-for question in clean_questions:
+for question in questions:
     lengths.append(len(question.split()))
-for answer in clean_answers:
+for answer in answers:
     lengths.append(len(answer.split()))
 
 # Create a dataframe so that the values can be inspected
@@ -126,10 +85,10 @@ i = 0
 short_questions = []
 short_answers = []
 
-for i in range(len(clean_questions)):
-    if len(clean_questions[i].split()) >= min_line_length and len(clean_questions[i].split()) <= max_line_length and len(clean_answers[i].split()) >= min_line_length and len(clean_answers[i].split()) <= max_line_length:
-        short_questions.append(clean_questions[i])
-        short_answers.append(clean_answers[i])
+for i in range(len(questions)):
+    if len(questions[i].split()) >= min_line_length and len(questions[i].split()) <= max_line_length and len(answers[i].split()) >= min_line_length and len(answers[i].split()) <= max_line_length:
+        short_questions.append(questions[i])
+        short_answers.append(answers[i])
 # Filter out the answers2 that are too short/long
 
 
@@ -145,17 +104,18 @@ l2 = ['will not','will not','would not','would not',' am', ' are', ' have', ' wi
 l3 = ['-', '_', ' *', ' /', '* ', '/ ', '\"', ' \\"', '\\ ', '--', '...', '. . .']
 
 def my_replace(raw_word):
-        for j, term in enumerate(l1):
-                raw_word = raw_word.replace(term,l2[j])
-        for term in l3:
-                raw_word = raw_word.replace(term,' ')
-        return clean_text(raw_word.lower())
+    for j, term in enumerate(l1):
+        raw_word = raw_word.replace(term,l2[j]).lower()
+    for term in l3:
+        raw_word = raw_word.replace(term,' ').lower()
+    return raw_word
+
 
 
 fq = open('context2', 'w')
 fa = open('answers2', 'w')
 for i in range(len(short_questions)):
-    fq.write(my_replace(short_questions[i] + " " + short_answers[i]) + "\n")
+    fq.write(my_replace(short_questions[i] + "\n"))
     fa.write(my_replace(short_answers[i] + "\n"))
 
 fq.close()
